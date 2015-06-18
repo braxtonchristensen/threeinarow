@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html ng-app="ticTacToe">
+<head>
+	<title>Tic Tac Toe by Braxton</title>
+	<link href="normalize.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300italic,400,300' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+</head>
+<body ng-controller="TicTacToeController" ng-model="gameContainer">
+
+	<div class="darkenWindow" ng-show="infoBoxView"></div>
+
+	<h1>Tic Tac Toe</h1>
+
+	<div ng-click="gameEnter()" ng-show="welcomeView">
+		<div class="logo"></div>
+		<div class="start">START GAME</div>
+	</div>
+
+	<div class="about" ng-show="welcomeView">
+
+		<div><b>About the Game</b>: Click "Start Game" to play a match. After a game is complete, look at past game boards to gain insight on your opponent's strategies or just play another game. It can also be played on two screens simultaneously so find a friend and enjoy!</div>
+
+		<div><b>About the Project</b>: This version of Tic Tac Toe was produced by <a href="https://github.com/braxtonchristensen" target="_blank">Braxton Christensen</a> as his first project for <a href="https://devmounta.in/" target="_blank">DevMountain's Web Development Immersive</a> program. It was built using AngularJS and Firebase.</div>
+
+		<div class="iconDiv"><a href="https://github.com/braxtonchristensen" target="_blank"><i class="fa fa-github fa-2x"></i></a></div>
+
+	</div>
+
+
+	<div class="gameView" ng-show="gameView" >
+
+		<form class="player1Name" ng-class="{ playerTurn : currentPlayer.symbol == 'X' }">
+			<div class="playerSymbol">X</div>
+			<div class="nameDirections"><em>Click below to enter your name.</em></div>
+			<input type="text" ng-model="player1Name" class="nameInput" />
+		</form>
+
+		<form class="player2Name" ng-class="{ playerTurn : currentPlayer.symbol == 'O' }">
+			<div class="playerSymbol">O</div>
+			<div class="nameDirections"><em>Click below to enter your name.</em></div>
+			<input type="text" ng-model="player2Name" class="nameInput" />
+		</form>
+
+		<div class="gameboard" ng-class="{gameOver: gameOver}" ng-model="gameContainer">
+
+			<div ng-repeat="b in gameContainer.board.boxes" ng-click="b.clicked || gameOver || box(b)" ng-class="{tile : b.player == 2, player1 : b.player == 0, player2 : b.player == 1, clicked : b.clicked, noClick : gameOver, player1WinColor : b.colorMe == 'X', player2WinColor : b.colorMe == 'O'}">
+				<div class="symbol">{{b.symbol}}</div>
+			</div>
+
+		</div>
+
+		<div class="win" ng-show="gameOver">
+			<div class="winStatement" ng-hide="tie">{{gameContainer.board.winner}} Wins!</div>
+			<div class="winStatement" ng-show="tie">Nobody Wins...</div>
+			<div class="buttonDiv">
+				<div ng-click="startOver()" class="buttonPress">Play Again</div> 
+				<div>//</div>
+				<div ng-click="viewPastGames()" class="buttonPress">Past Games</div>
+			</div>
+		</div>
+
+		<div class="infoIcon">
+
+			<div ng-click="triggerInfoBox()"><i class="fa fa-info-circle fa-2x"></i></div>
+
+		</div>
+
+		<div class="infoBox" ng-show="infoBoxView" ng-class="{fadeInUp : infoBoxView}">
+
+			<div class="closeWindow" ng-click="infoBoxView = false">X</div>
+
+			<div class="infoBoxDiv"><i class="fa fa-info-circle fa-2x"></i></div>
+
+			<div class="infoBoxDiv"><b>About the Game</b>: Click "Start Game" to play a match. After a game is complete, look at past game boards to gain insight on your opponent's strategies or just play another game. It can also be played on two screens simultaneously so find a friend and enjoy!</div>
+
+			<div><b>About the Project</b>: This version of Tic Tac Toe was produced by <a href="https://github.com/braxtonchristensen" target="_blank">Braxton Christensen</a> as his first project for <a href="https://devmounta.in/" target="_blank">DevMountain's Web Development Immersive</a> program. It was built using AngularJS and Firebase.</div>
+
+			<div class="iconDiv"><a href="https://github.com/braxtonchristensen" target="_blank"><i class="fa fa-github fa-2x"></i></a></div>
+
+		</div>
+
+	</div>
+
+	<div class="pastGamesContainer" ng-show="pastView">
+		<div class="clearfix">
+			<div ng-repeat="p in pastGamesContainer.pastGames" class="gameStats">
+				<div class="miniBoard">
+					<div ng-repeat="b in p.board.boxes" ng-class="{miniTile : b.player == 2, player1Mini : b.player == 0, player2Mini : b.player == 1, clicked : b.clicked, noClick : gameOver, player1WinColor : b.colorMe == 'X', player2WinColor : b.colorMe == 'O'}">
+						<div class="miniSymbol">{{b.symbol}}</div>
+					</div>
+				</div>
+				<div class="miniBoardText">
+					<div>Game {{$index + 1}}</div>
+					<div>Winner: {{p.board.winner}}</div>
+
+				</div>
+			</div>
+		</div>
+		<div>
+			<div ng-click="startOver()" class="buttonPress">Play Again</div>
+		</div>
+	</div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular.min.js"></script>
+	<script type='text/javascript' src='https://cdn.firebase.com/js/client/1.0.17/firebase.js'></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/0.7.1/angularfire.min.js"></script>
+	<script type="text/javascript" src="controllers.js"></script>
+
+</body>
+</html>
