@@ -21,7 +21,7 @@ ticTacToe
 
 		$scope.triggerInfoBox = function(){
 			$scope.infoBoxView = true;
-		}
+		};
 
 
 		// -------- Game Container Data -------- //
@@ -48,7 +48,7 @@ ticTacToe
 			board: $scope.board,
 			players: $scope.players
 
-		}
+		};
 
 		// -------- Storing Past Games -------- //
 
@@ -97,26 +97,26 @@ ticTacToe
 			$scope.pastGamesContainer = {
 				pastGames: []
 			};
-		}
+		};
 
 		// Watch player names and update if changed
 
 		$scope.$watch( 'player1Name', function(){
-			if ($scope.gameView && ($scope.totalGames % 2 == 0)){
+			if ($scope.gameView && ($scope.totalGames % 2 === 0)) {
 				$scope.players[0].name = $scope.player1Name;
 			}
-			else if ($scope.gameView && ($scope.totalGames % 2 == 1)){
+			else if ($scope.gameView && ($scope.totalGames % 2 === 1)){
 				$scope.players[1].name = $scope.player1Name;
-			};
+			}
 		} );
 
 		$scope.$watch( 'player2Name', function(){
-			if ($scope.gameView && ($scope.totalGames % 2 == 0)){
+			if ($scope.gameView && ($scope.totalGames % 2 === 0)) {
 				$scope.players[1].name = $scope.player2Name;
 			}
-			else if ($scope.gameView && ($scope.totalGames % 2 == 1)){
+			else if ($scope.gameView && ($scope.totalGames % 2 === 1)){
 				$scope.players[0].name = $scope.player2Name;
-			};
+			}
 		} );
 
 
@@ -134,10 +134,10 @@ ticTacToe
 				eval("$scope."+ playerString +".row"+(Math.floor(cellId / 3))+"++");
 				eval("$scope."+playerString+".column"+(cellId % 3)+"++");
 
-				if (cellId % (4) == 0){
+				if (cellId % (4) === 0){
 					eval("$scope."+playerString+".diagonal0++");
 				}
-				if (cellId % (2) == 0 && cellId > 0 && cellId < 8){
+				if (cellId % (2) === 0 && cellId > 0 && cellId < 8){
 					eval("$scope."+playerString+".diagonal1++");
 				}
 				cellIndex.clicked = true;
@@ -150,7 +150,7 @@ ticTacToe
 						}
 				}
 
-				if($scope.turn == 8 && $scope.gameOver == false){
+				if($scope.turn === 8 && $scope.gameOver === false){
 						$scope.tieFunc();
 				}
 
@@ -170,35 +170,35 @@ ticTacToe
 			$scope.gameContainer.board.winner = player.name; //set a property for player winner to be viewed in stats
 			$scope.pastGamesContainer.pastGames.push($scope.gameContainer); //store past games
 			$scope.totalGames+=1; //add one to total games
-		}
+		};
 
 		// -------- Tie Function -------- //
 
 		$scope.tieFunc = function(){
 			$scope.gameOver = true;
-			$scope.gameContainer.board.winner = "NA";
+			$scope.gameContainer.board.winner = "Nobody Wins";
 			$scope.pastGamesContainer.pastGames.push($scope.gameContainer); //store past games
 			$scope.tie = true;
-			$scope.totalGames+=1 //add one to total games;
-		}
-
-		// -------- Add Stats Function -------- //
-
-
+			$scope.totalGames+=1; //add one to total games
+			if ($scope.player1Name === 'Pentagon' && $scope.tie === true) {
+				alert('nuked');
+				console.log('wargames');
+			}
+		};
 
 		// -------- Start New Game -------- //
 
 		$scope.startOver = function(){
 			$scope.players = $scope.newPlayers.reverse();
-			if ($scope.totalGames%2 == 0){
+			if ($scope.totalGames%2 === 0){
 				$scope.players[0].name = $scope.player1Name;
 				$scope.players[1].name = $scope.player2Name;
 			}
-			if ($scope.totalGames%2 == 1){
+			if ($scope.totalGames%2 === 1){
 				$scope.players[0].name = $scope.player2Name;
 				$scope.players[1].name = $scope.player1Name;
 			}
-			$scope.players.reverse
+			$scope.players.reverse;
 			$scope.gameContainer = $scope.newBoard;
 			$scope.gameOver = false;
 			$scope.newPlayers = angular.copy($scope.players);
@@ -208,14 +208,14 @@ ticTacToe
 			$scope.pastView = false;
 			$scope.gameView = true;
 			$scope.currentPlayer = $scope.players[0];
-		}
+		};
 
 		// -------- View Past Games -------- //
 
 		$scope.viewPastGames = function(){
 			$scope.gameView = false;
 			$scope.pastView = true;
-		}
+		};
 
 		// -------- Color the Winning Combinations -------- //
 
@@ -231,22 +231,22 @@ ticTacToe
 			column2: [2,5,8],
 			diagonal0: [0,4,8],
 			diagonal1: [2,4,6]
-		}
+		};
 
 
 		//Create a for loop that sets a property (colorMe) in winning combo boxes.
 		//When true, these boxes will get the class winColor, which will color the letters.
 
 		$scope.colorCombo = function(prop, symbol){
-			for (c in $scope.combos){
-				if ($scope.winningPlay == c){
+			for (c in $scope.combos) {
+				if ($scope.winningPlay === c) {
 					$scope.winCombo = $scope.combos[c];
-					for (d in $scope.winCombo){
+					for (d in $scope.winCombo) {
 						$scope.gameContainer.board.boxes[$scope.winCombo[d]].colorMe = symbol;
 					}
 				}
 			}
-		}
+		};
 
 		$scope.remoteGameContainer.$bind($scope, "gameContainer");
 		$scope.remoteTurn.$bind($scope, "turn");
